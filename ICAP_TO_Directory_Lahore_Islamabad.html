@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ICAP Approved Training Organizations — Lahore & Islamabad</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0d1f3c;--gold:#c8973a;--cream:#faf8f3;--white:#fff;
+  --text:#1a2b3c;--muted:#5a6a7a;--border:#d5c9b0;--hover:#f0ece2;
+  --v-bg:#e9f8ee;--v-col:#1a5c2a;--l-bg:#fff8e6;--l-col:#7a5000;
+  --e-bg:#e6effd;--e-col:#1a3a7a;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--navy);position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(200,151,58,.04) 40px,rgba(200,151,58,.04) 41px)}
+.hdr-in{position:relative;max-width:1500px;margin:0 auto;padding:36px 40px 28px;
+  display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.emblem{flex-shrink:0;width:64px;height:64px;border:2px solid var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--gold)}
+.hdr-eye{font-size:10.5px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.hdr-title{font-family:'Playfair Display',serif;font-size:27px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:7px}
+.hdr-sub{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:300;line-height:1.6}
+.hdr-meta{margin-left:auto;text-align:right;padding-top:2px}
+.hdr-badge{display:inline-block;border:1px solid rgba(200,151,58,.4);border-radius:4px;
+  padding:4px 12px;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.hdr-stat{font-size:11.5px;color:rgba(255,255,255,.38);display:block;margin-bottom:2px}
+
+/* NOTICE */
+.notice{background:#fff8ec;border-bottom:1px solid #e8d5a3;padding:8px 40px}
+.notice-in{max-width:1500px;margin:0 auto;font-size:12.5px;color:#7a5c1e;
+  display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+
+/* LEGEND */
+.legend{background:#fff;border-bottom:1.5px solid var(--border);padding:9px 40px}
+.leg-in{max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.leg-lbl{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+.leg{display:inline-flex;align-items:center;gap:6px;font-size:12px}
+.leg-dot{width:20px;height:20px;border-radius:4px;display:inline-flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.dv{background:var(--v-bg);color:var(--v-col)}
+.dl{background:var(--l-bg);color:var(--l-col)}
+.de{background:var(--e-bg);color:var(--e-col)}
+.dn{background:#f4f4f4;color:#aaa}
+
+/* CONTROLS */
+.ctrl{max-width:1500px;margin:0 auto;padding:22px 40px 0;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tabs{display:flex;background:#fff;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;flex-shrink:0}
+.tab{padding:9px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .18s}
+.tab.on{background:var(--navy);color:#fff}
+.tab:not(.on):hover{background:#f0ede6}
+.srch{flex:1;min-width:180px;position:relative}
+.srch-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+.srch input{width:100%;padding:9px 10px 9px 32px;border:1.5px solid var(--border);border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border-color .18s}
+.srch input:focus{border-color:var(--navy)}
+.cnt{background:var(--navy);color:#fff;border-radius:20px;font-size:12px;font-weight:600;padding:6px 14px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 17px;border:none;border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;flex-shrink:0}
+.btn-pdf{background:linear-gradient(135deg,#c8401a,#a83010);color:#fff}
+.btn-pdf:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-print{background:#fff;color:var(--navy);border:1.5px solid var(--border)}
+.btn-print:hover{background:#f0ede6}
+.btn-clr{background:#fff0f0;color:#c8401a;border:1.5px solid #f0c0b0;font-size:12.5px}
+.btn-clr:hover{background:#ffe0e0}
+
+/* SECTION */
+.sec{max-width:1500px;margin:0 auto;padding:22px 40px 60px;display:none}
+.sec.on{display:block}
+.sec-hd{display:flex;align-items:center;gap:18px;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.city{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-.5px}
+.city-line{flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
+.city-ct{font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:10px;border:1.5px solid var(--border);
+  background:#fff;box-shadow:0 2px 16px rgba(13,31,60,.06)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{background:var(--navy);color:#fff;font-size:9.5px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;padding:11px 11px;
+  text-align:left;white-space:nowrap;border-bottom:2px solid var(--gold)}
+tbody tr{border-bottom:1px solid #eee8db;transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--hover)}
+tbody tr.hid{display:none}
+td{padding:10px 11px;vertical-align:top;line-height:1.5;color:var(--text)}
+td:first-child{font-weight:600;color:var(--muted);font-size:11px;vertical-align:middle;white-space:nowrap}
+.tc{font-size:10.5px;font-weight:700;color:var(--navy);background:rgba(13,31,60,.07);
+  border-radius:4px;padding:2px 7px;white-space:nowrap;display:inline-block}
+.tn{font-weight:600;font-size:13px;color:var(--navy)}
+.td{font-size:11px;color:var(--muted);white-space:nowrap;vertical-align:middle}
+.tm{font-size:11.5px;max-width:155px}
+.ta{font-size:11.5px;color:#3a4a5a;min-width:140px;max-width:195px}
+.nores{text-align:center;padding:50px;color:var(--muted);font-size:14px;display:none}
+.nores.on{display:block}
+
+/* EDITABLE CELLS */
+.ec{cursor:pointer;min-width:120px;max-width:165px;position:relative}
+.ec:hover{background:#fafaf5}
+.ec::after{content:'✎';position:absolute;top:5px;right:5px;font-size:10px;
+  color:var(--gold);opacity:0;transition:opacity .15s;pointer-events:none}
+.ec:hover::after{opacity:.7}
+.cv{display:block;font-size:12px;color:var(--text);word-break:break-all;line-height:1.4;margin-bottom:3px}
+.sb{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:700;
+  border-radius:3px;padding:1px 5px;letter-spacing:.3px;margin-top:2px}
+.sv{background:var(--v-bg);color:var(--v-col)}
+.sl{background:var(--l-bg);color:var(--l-col)}
+.se{background:var(--e-bg);color:var(--e-col)}
+.ce{font-size:12px;color:#ccc;cursor:pointer;font-style:italic}
+.ce:hover{color:var(--gold)}
+.ei{width:100%;padding:5px 8px;border:2px solid var(--gold);border-radius:5px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);
+  background:#fffbf4;outline:none;box-sizing:border-box}
+.ei:focus{box-shadow:0 0 0 3px rgba(200,151,58,.15)}
+.wl{color:var(--navy);text-decoration:none;font-size:12px;word-break:break-all}
+.wl:hover{text-decoration:underline;color:var(--gold)}
+
+/* CONTEXT MENU */
+.ctx{position:fixed;background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;padding:5px 0;box-shadow:0 8px 24px rgba(0,0,0,.12);
+  z-index:9999;min-width:155px;display:none}
+.ctx.on{display:block}
+.ci{padding:8px 15px;font-size:13px;cursor:pointer;color:var(--text);
+  display:flex;align-items:center;gap:8px}
+.ci:hover{background:var(--cream)}
+.ci.red{color:#c8401a}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.38);text-align:center;
+  padding:22px;font-size:12px;line-height:1.9}
+footer strong{color:rgba(255,255,255,.6)}
+
+/* PRINT */
+@media print{
+  .ctrl,.legend,.notice,.hdr-meta,.ctx,footer,
+  .tab,.cnt,.btn,#searchInput{display:none!important}
+  .sec{display:block!important;padding:8px;page-break-before:always}
+  .sec:first-of-type{page-break-before:auto}
+  .hdr{background:#0d1f3c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff}
+  thead th{background:#0d1f3c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .twrap{box-shadow:none;border:1px solid #ccc}
+  td,th{font-size:9px!important;padding:4px 6px!important}
+  .ec::after{display:none}
+}
+@media(max-width:768px){
+  .hdr-in,.ctrl,.sec,.leg-in,.notice-in{padding:14px}
+  .hdr-meta{margin-left:0;text-align:left}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="emblem">CA</div>
+    <div>
+      <div class="hdr-eye">Institute of Chartered Accountants of Pakistan</div>
+      <h1 class="hdr-title">Approved Training Organizations Directory<br>Lahore &amp; Islamabad</h1>
+      <p class="hdr-sub">ICAP Official PDF · Contacts verified: SBP BPRD Circular No.19 (Oct 2024), PSX Panel 2023, firm websites · Click any contact cell to edit &amp; save</p>
+    </div>
+    <div class="hdr-meta">
+      <span class="hdr-badge">ICAP Official Reference</span><br/>
+      <span class="hdr-stat" id="s1"></span>
+      <span class="hdr-stat" id="s2"></span>
+      <span class="hdr-stat">Source: ICAP Approved TOs PDF 2024-25</span>
+    </div>
+  </div>
+</header>
+
+<div class="notice">
+  <div class="notice-in">
+    <span>ℹ</span>
+    <span><strong>Edit contacts:</strong> Click any Phone, Email or Website cell to update. Changes auto-save in your browser. Right-click for copy / reset options. <strong>Export PDF</strong> includes all your edits. Legacy contacts (⚠) are from pre-2020 sources — verify before use. For unlisted firms contact ICAP Lahore: <strong>042-111-000-422</strong></span>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg-in">
+    <span class="leg-lbl">Contact Status:</span>
+    <span class="leg"><span class="leg-dot dv">✓</span>Verified (SBP 2024 / Firm Website)</span>
+    <span class="leg"><span class="leg-dot dl">⚠</span>Legacy (pre-2020, verify first)</span>
+    <span class="leg"><span class="leg-dot de">✏</span>Edited by you</span>
+    <span class="leg"><span class="leg-dot dn">—</span>Not found publicly</span>
+  </div>
+</div>
+
+<div class="ctrl">
+  <div class="tabs">
+    <button class="tab on" onclick="switchTab('l',this)">🏙 LAHORE</button>
+    <button class="tab" onclick="switchTab('i',this)">🏛 ISLAMABAD</button>
+  </div>
+  <div class="srch">
+    <span class="srch-ico">🔍</span>
+    <input id="q" type="text" placeholder="Search firm name, TO code, address, phone…" oninput="filter()"/>
+  </div>
+  <span class="cnt" id="cnt">…</span>
+  <button class="btn btn-pdf" onclick="exportPDF()">⬇ Export PDF</button>
+  <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
+  <button class="btn btn-clr" onclick="clearAll()">↺ Reset All Edits</button>
+</div>
+
+<div class="sec on" id="sl">
+  <div class="sec-hd">
+    <h2 class="city">LAHORE</h2>
+    <div class="city-line"></div>
+    <span class="city-ct" id="lct"></span>
+  </div>
+  <div class="twrap">
+    <table><thead><tr>
+      <th>#</th><th>TO Code</th><th>Firm Name</th><th>Approved</th>
+      <th>MRS (ICAP Reg.)</th><th>Address</th>
+      <th>📞 Phone</th><th>✉ Email</th><th>🌐 Website</th>
+    </tr></thead>
+    <tbody id="lt"></tbody></table>
+    <div class="nores" id="ln">No matching firms found.</div>
+  </div>
+</div>
+
+<div class="sec" id="si">
+  <div class="sec-hd">
+    <h2 class="city">ISLAMABAD</h2>
+    <div class="city-line"></div>
+    <span class="city-ct" id="ict"></span>
+  </div>
+  <div class="twrap">
+    <table><thead><tr>
+      <th>#</th><th>TO Code</th><th>Firm Name</th><th>Approved</th>
+      <th>MRS (ICAP Reg.)</th><th>Address</th>
+      <th>📞 Phone</th><th>✉ Email</th><th>🌐 Website</th>
+    </tr></thead>
+    <tbody id="it"></tbody></table>
+    <div class="nores" id="in">No matching firms found.</div>
+  </div>
+</div>
+
+<div class="ctx" id="ctx">
+  <div class="ci" onclick="cCopy()">📋 Copy value</div>
+  <div class="ci red" onclick="cReset()">↺ Reset to original</div>
+  <div class="ci red" onclick="cClear()">✕ Clear value</div>
+</div>
+
+<footer>
+  <strong>ICAP Approved Training Organizations Directory — Lahore &amp; Islamabad</strong><br/>
+  Verified contacts sourced from: SBP BPRD Circular No.19 Annexure (Oct 2024) · PSX Panel of Auditors (Nov 2023) · Official firm websites<br/>
+  For unlisted firm contacts: ICAP Lahore Regional Office <strong>042-111-000-422</strong> · <strong>members.directory@icap.org.pk</strong><br/>
+  <em>Contacts marked Legacy are from pre-2020 sources and should be verified before use. This directory is for informational purposes only.</em>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════
+//  LOCAL STORAGE
+// ═══════════════════════════════════════════
+const SK='icapv3';
+const ge=()=>{try{return JSON.parse(localStorage.getItem(SK)||'{}')}catch(e){return{}}};
+const se=o=>{try{localStorage.setItem(SK,JSON.stringify(o))}catch(e){}};
+const gv=(c,k,f)=>ge()[c+':'+k+':'+f];
+const sv=(c,k,f,v)=>{const o=ge();const key=c+':'+k+':'+f;if(v==='')delete o[key];else o[key]=v;se(o);};
+
+function clearAll(){
+  if(confirm('Remove ALL your custom edits and restore original contacts?')){
+    localStorage.removeItem(SK); render();
+  }
+}
+
+// ═══════════════════════════════════════════
+//  DATA  (code,name,date,mrs,addr,ph,ps,em,es,web)
+//  ps/es: V=verified  L=legacy  N=not-found
+// ═══════════════════════════════════════════
+const L=[
+{code:'TO-003',name:'EY Ford Rhodes',date:'28-Apr-2006',mrs:'Mr. Muhammad Awais, FCA (2753); Mr. Muhammad Masood, FCA (2283)',addr:'96-B-1, MM Alam Road, Gulberg II',ph:'+92-42-35778402',ps:'V',em:'eyfrsh.lhr@pk.ey.com',es:'V',web:'ey.com'},
+{code:'TO-005',name:'Rafaqat Mansha Mohsin Dossani Masoom & Co.',date:'26-Jul-2006',mrs:'Mr. Mohsin Nadeem, FCA (2026)',addr:'4th Floor, Pace Mall Building, Shahrah-e-Quaid-e-Azam',ph:'',ps:'N',em:'',es:'N',web:'mmdk.com.pk'},
+{code:'TO-006',name:'A. F. Ferguson & Co.',date:'10-May-2006',mrs:'Mr. Waqas Aftab Sheikh, FCA (3107)',addr:'308 Upper Mall, Shahrah-e-Quaid-e-Azam',ph:'+92-42-35715868',ps:'V',em:'lahore@pk.pwc.com',es:'V',web:'affco.com.pk'},
+{code:'TO-007',name:'KPMG Taseer Hadi & Co.',date:'12-May-2006',mrs:'Mr. Kamran Iqbal Yousafi, FCA (2365)',addr:'351, Shadman-1, Main Jail Road',ph:'+92-42-35790901',ps:'V',em:'lahore@kpmg.com',es:'V',web:'kpmg.com.pk'},
+{code:'TO-009',name:'RSM Avais Hyder Liaquat Nauman',date:'26-Sep-2006',mrs:'Mr. Javed Munir, FCA (1469)',addr:'Civic Center, Barkat Market, New Garden Town',ph:'',ps:'N',em:'lahore@rsmpakistan.pk',es:'V',web:'rsm.global/pakistan'},
+{code:'TO-010',name:'Ilyas Saeed & Co.',date:'02-Dec-2006',mrs:'Mr. Javed Munir, FCA (1469)',addr:'Civic Center, Barkat Market, New Garden Town',ph:'+92-42-35861852',ps:'V',em:'info@ilyassaeed.com',es:'V',web:'ilyassaeed.com'},
+{code:'TO-011',name:'HLB Ijaz Tabussum & Co.',date:'13-Dec-2006',mrs:'Mr. Ijaz Akber, FCA (1491)',addr:'87-E, Maulana Shaukat Ali Road, Gulberg',ph:'',ps:'N',em:'admin@hlbitc.com',es:'V',web:'hlbpakistan.com'},
+{code:'TO-012',name:'Moore Shekha Mufti',date:'14-Dec-2006',mrs:'Mr. Muhammad Jawwad Shekha, FCA (2966)',addr:'134-A Abubakar Block, Johar Town',ph:'+92-42-32335958',ps:'V',em:'info.lhr@mooreshekhamufti.com',es:'V',web:'mooreshekhamufti.com'},
+{code:'TO-014',name:'Yousuf Adil',date:'01-Nov-2020',mrs:'Mr. Rana Muhammad Usman Khan, FCA (2225)',addr:'134-A, Abubakar Block, New Garden Town',ph:'+92-42-35913595',ps:'V',em:'',es:'N',web:'yousufadil.com'},
+{code:'TO-015',name:'Rahman Sarfaraz Rahim Iqbal Rafiq',date:'22-Dec-2006',mrs:'Mr. Rashid Rahman Mir, FCA (1621)',addr:'54-P, Gulberg II, Napier Road',ph:'+92-42-35875965',ps:'V',em:'rsrirlhr@gmail.com',es:'L',web:'rsrir.com'},
+{code:'TO-016',name:'Nazir Chaudhri & Co.',date:'06-Jan-2007',mrs:'Mr. Nazir Ahmad Chaudhri, FCA (0982)',addr:'72-A, Faisal Town, 62-Mozang Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-017',name:'Ehtisham & Co.',date:'10-Oct-2006',mrs:'Mr. Muhammad Ehtisham, FCA (3020)',addr:'415-B, Block Faisal Town',ph:'+92-42-36370215',ps:'V',em:'info@mudassarehtisham.com',es:'V',web:'mudassarehtisham.com'},
+{code:'TO-018',name:'Zaheer Babar & Co.',date:'26-Nov-2006',mrs:'Mr. Zaheer-ud-Din Babar, FCA (2756)',addr:'415-B, Block Faisal Town, Canal Road',ph:'+92-42-36302445',ps:'L',em:'',es:'N',web:''},
+{code:'TO-019',name:'Amin Mudassar & Co.',date:'13-Feb-2007',mrs:'Mr. Ghulam Mudassar, FCA (1881)',addr:'207-208, Hassan Shopping Mall; H-8/3',ph:'+92-42-35717261',ps:'V',em:'amclhr1@brain.net.pk',es:'L',web:''},
+{code:'TO-020',name:'Mahboob Sheikh & Co.',date:'19-Feb-2007',mrs:'Mr. Muhammad Daoud, FCA (3499)',addr:'20-A, Peoples Colony, Canal Road, Gulberg-V',ph:'',ps:'N',em:'mahboob_ca@hotmail.com',es:'L',web:''},
+{code:'TO-021',name:'Naveed Zafar Ashfaq Jaffery & Co.',date:'17-Feb-2007',mrs:'Mr. Shah Naveed Saeed, FCA (1295)',addr:'10-B, Saint Mary Park, Upper Mall, Gulberg III',ph:'',ps:'N',em:'khi@nzaj.com.pk',es:'V',web:'nzaj.com.pk'},
+{code:'TO-022',name:'Riaz Ahmad & Co.',date:'06-Mar-2007',mrs:'Mr. Sarfraz Mahmood, FCA (1168)',addr:'42/A, Lawrence Road; Main Boulevard, Gulberg III',ph:'+92-42-35718137',ps:'V',em:'racolhr@racopk.com',es:'V',web:'racopk.com'},
+{code:'TO-023',name:'Viqar A. Khan & Co.',date:'27-Mar-2007',mrs:'Mr. Viqar Ahmed Khan, FCA (1602)',addr:'152 Scotch Corner, Gulberg II',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-024',name:'Yusaf Saeed & Co.',date:'26-Mar-2007',mrs:'Mr. Yusaf Mian Saeed, FCA (1390)',addr:'Bahria Town Tower, Main Boulevard, Gulberg III',ph:'',ps:'N',em:'info@yusafsaeed.com',es:'L',web:''},
+{code:'TO-026',name:'Sarwars',date:'13-Apr-2007',mrs:'Mr. Rashid Sarwar, FCA (1352)',addr:'Corporate Avenue, 32-A Jail Road',ph:'+92-42-35782920',ps:'V',em:'sarwars@sarwarsca.com',es:'V',web:'sarwarsca.com'},
+{code:'TO-027',name:'Ahmad Usman Shabbir & Co.',date:'28-Apr-2007',mrs:'Mr. Ahmad Usman Shabbir, FCA (2199)',addr:'Eden Center, 43-Jail Road',ph:'',ps:'N',em:'',es:'N',web:'aus-ca.com'},
+{code:'TO-028',name:'Rizwan & Co.',date:'30-Apr-2007',mrs:'Mr. Rizwan Bashir, FCA (2361)',addr:'114-A, Tipu Block, New Garden Town',ph:'+92-42-35781166',ps:'V',em:'rcolhr@rizwanandco.com',es:'V',web:'rizwanandco.com'},
+{code:'TO-029',name:'Omer Adil & Co.',date:'21-May-2007',mrs:'Mr. Omer Adil, FCA (3392)',addr:'Suite No. 005, 77-D, Main Boulevard, Gulberg III',ph:'',ps:'N',em:'',es:'N',web:'omeradil.com'},
+{code:'TO-030',name:'Crowe Hussain Chaudhury & Co.',date:'16-May-2007',mrs:'Mr. Chaudhury Ahmed Habib, FCA (1752)',addr:'House 982, Street 21, Phase IV, Bahria Town',ph:'+92-42-35759223',ps:'V',em:'crowe@crowe.pk',es:'V',web:'crowe.pk'},
+{code:'TO-031',name:'BDO Ebrahim & Co.',date:'18-May-2007',mrs:'Mr. Najeeb Taher Moochhala, FCA (2420)',addr:'7th Floor, GulMohar Trade Center, Gulberg-II',ph:'+92-42-35875709',ps:'L',em:'info@bdo.com.pk',es:'V',web:'bdo.com.pk'},
+{code:'TO-034',name:'Yaqub & Co.',date:'23-May-2007',mrs:'Mr. Muhammad Asad Waqas, FCA (8970)',addr:'Askari Corporate Tower, Main Boulevard, Gulberg-III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-035',name:'Nadeem Ahmad & Co.',date:'22-May-2007',mrs:'Mr. Nadeem Ahmad Ghaznavi, FCA (2841)',addr:'Awan House, 23 Jail Road / 135 Ferozepur Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-036',name:'Muniff Ziauddin & Co.',date:'28-May-2007',mrs:'Mr. Muhammad Ali Latif, FCA (4128)',addr:'188 D-1, Model Town',ph:'',ps:'N',em:'info@mzco.com.pk',es:'V',web:'mzco.com.pk'},
+{code:'TO-037',name:'Baker Tilly Mehmood Idrees Qamar',date:'10-Apr-2007',mrs:'Mr. Qamar Rashid, FCA (2927)',addr:'RDF Building, Kohinoor City; 188 D-1 Model Town',ph:'+92-42-35842491',ps:'V',em:'info_lhr@bakertilly.pk',es:'V',web:'bakertilly.pk'},
+{code:'TO-038',name:'Grant Thornton Anjum Rahman',date:'02-May-2007',mrs:'Mr. Imran Afzal, FCA (1570)',addr:'Eden Centre, 43 Jail Road; Modern Motors House',ph:'+92-42-37423621',ps:'V',em:'iafzal@gtpak.com',es:'V',web:'grantthornton.pk'},
+{code:'TO-039',name:'Ather Rasool Imran & Co.',date:'22-May-2007',mrs:'Mr. Muhammad Imran Sarver, FCA (5373)',addr:'Madina Heights, 87-E, Maulana Shaukat Ali Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-043',name:'Ahmed Mushir & Salariya',date:'30-May-2007',mrs:'Mr. Zulfiqar Ahmed Nasir, FCA (1809)',addr:'135-E, Shadman 2 / Canal Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-044',name:'Tahir Siddiqi & Co.',date:'07-Jun-2007',mrs:'Mr. Mohammad Tahir Siddiqi, FCA (1036)',addr:'274-D, P.I.A. Housing Society, Madina Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-051',name:'M. Almas & Co.',date:'27-Jun-2007',mrs:'Mr. Mohammad Almas, FCA (1391)',addr:'207-Sadiq Plaza, 2nd Floor, 69-The Mall',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-052',name:'Kamran & Co.',date:'28-Jun-2007',mrs:'Mr. Kamran Fatah, FCA (1539)',addr:'A/2 Ingola Apartments, 24-Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-053',name:'Salariya & Co.',date:'29-Jun-2007',mrs:'Mr. Muhammad Tufail Salariya, FCA (1031)',addr:'F-14 & 15 Fatima Center, 14-A Shahrah-e-Fatima Jinnah',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-055',name:'Awan & Co.',date:'28-Apr-2007',mrs:'Mr. Muhammad Aslam, FCA (3814)',addr:'4th Floor, Central Plaza, Civic Center, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-058',name:'Sarwar Awan & Co.',date:'22-May-2007',mrs:'Mr. Nadeem Ahmad Ghaznavi, FCA (2841)',addr:'3rd Floor, Pace Tower, Block H, Gulberg-2',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-059',name:'M. A. Chaudhri & Co.',date:'05-Jun-2007',mrs:'Mr. Mubarik Ali, FCA (1169)',addr:'Awan House, 23-Jail Road / 33/1-A, Queens Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-061',name:'Azhar Zafar & Co.',date:'18-Jun-2007',mrs:'Mr. Zafar Iqbal, FCA (1192)',addr:'33/1-A, Queens Road; SAF Centre, 8-Fane Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-063',name:'A. Aziz Chaudury & Co.',date:'18-Jun-2009',mrs:'Mr. Muhammad Sarfraz, FCA (1552)',addr:'38, Shahrah-e-Quaid-e-Azam Service Rd N',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-068',name:'Hassan Farooq & Co.',date:'30-Jun-2007',mrs:'Mr. Kamran Hassan, FCA (2069)',addr:'Ali Block, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-069',name:'Riaz Ahmad, Saqib, Gohar & Co.',date:'12-Sep-2007',mrs:'Mr. Gohar Manzoor, FCA (1710)',addr:'Building No. 35-D/E, Street No. 4, Phase 8-A DHA',ph:'+92-42-36316430',ps:'V',em:'rasglhr@rasgco.com',es:'V',web:'rasgco.com'},
+{code:'TO-072',name:'Fakharuddin Yousafali & Co.',date:'05-Sep-2007',mrs:'Mr. Tajammal Hussain, FCA (1856)',addr:'123-E/1, Unit B, Hali Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-073',name:'Javed & Co.',date:'24-Sep-2007',mrs:'Mr. Javed Iqbal Khan, FCA (1283)',addr:"F 2-3 Queen's Center, 33-Shahrah-e-Fatima Jinnah",ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-074',name:'Zahid Jamil & Co.',date:'10-Sep-2007',mrs:'Mr. Adeel Anwar, ACA (10674)',addr:'702, Eden Heights, Main Gulberg-III',ph:'+92-41-38725065',ps:'V',em:'info@zahidjamilco.com',es:'V',web:'zahidjamilco.com'},
+{code:'TO-076',name:'Ale Imran & Co.',date:'11-Sep-2007',mrs:'Mr. Ale Imran Siddiqi, FCA (2262)',addr:'180-B, S.M.C.H.S., Shahrah-e-Faisal',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-077',name:'Akhter Mahmood Mian',date:'12-Sep-2007',mrs:'Mr. Jamil Akhter Baig, FCA (2176)',addr:'House No. 494-A, Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-078',name:'Malik Haroon Ahmad & Co.',date:'18-Dec-2009',mrs:'Mr. Malik Haroon Ahmad, FCA (3504)',addr:'25 G, Gulberg II, Main Khadim Ali Road',ph:'+92-42-35772394',ps:'V',em:'info@mhssco.com',es:'V',web:'mhssco.com'},
+{code:'TO-079',name:'Fazal Mahmood & Co.',date:'26-Oct-2007',mrs:'Mr. Muhammad Arshad, FCA (3369)',addr:'Opp. Bashir Hospital, Main Khadim Ali Road, Shah Jamal',ph:'+92-42-37426771',ps:'V',em:'info@fmc.com.pk',es:'V',web:'fmc.com.pk'},
+{code:'TO-080',name:'UHY Hassan Naeem & Co.',date:'19-Dec-2007',mrs:'Mr. Ibne Hassan, FCA (1764)',addr:'147-Shadman Colony 1, 30-A PECHS, Block-6',ph:'+92-42-35403550',ps:'V',em:'info@uhy-hnco.com',es:'V',web:'uhy-hnco.com'},
+{code:'TO-081',name:'Kaleem & Co.',date:'17-Jan-2008',mrs:'Mr. Muhammad Kaleem Rathor, FCA (0487)',addr:'147-Shadman Colony 1 / Park Plaza, Cavalry Ground',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-082',name:'Yameen & Co.',date:'01-Feb-2008',mrs:'Mr. Muhammad Yameen, FCA (2857)',addr:'193-A, Cavalry Ground, Shershah Block',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-084',name:'Kreston Hyder Bhimji & Co.',date:'08-Dec-2007',mrs:'Mr. Shabir Ahmad, FCA (3189)',addr:'65-The Mall, Amin Building',ph:'+92-42-37321043',ps:'V',em:'khblhr@krestonhbco.com',es:'V',web:'krestonhbco.com'},
+{code:'TO-089',name:'Amin & Co.',date:'06-Mar-2008',mrs:'Mr. Shaukat Amin Shah, FCA (0357)',addr:'384-N Block, Samnabad; Sadiq Plaza, The Mall',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-090',name:'A. A. Baig & Co.',date:'20-Mar-2008',mrs:'Mr. Mirza Asad Ali Baig, FCA (3333)',addr:'384-N Block, Samnabad',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-091',name:'Muhammad Ayub & Co.',date:'25-Mar-2008',mrs:'Mr. Muhammad Ayub, FCA (2580)',addr:'Mumtaz Centre, Suite #5, Gulberg-III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-095',name:'Mushtaq & Co.',date:'01-Apr-2008',mrs:'Mr. Nouman Arshad, ACA (11937)',addr:'19-B, Block G, Gulberg-III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-102',name:'Aftab Nabi & Co.',date:'26-Jun-2008',mrs:'Mr. Faisal Aftab Ahmad, FCA (5810)',addr:'Room #31, 2nd Floor, Centre Point Plaza, Shaheed-e-Milat Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-104',name:'Arif Chaudhury & Co.',date:'26-Jun-2008',mrs:'Mr. Muhammad Arif, FCA (1302)',addr:'Waqar Qadir House, 28-Mozang Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-107',name:'Arshad Raheem & Co.',date:'28-Jun-2008',mrs:'Mr. Arshad Raheem, FCA (3428)',addr:'Yousuf Islam House, 39-Link Farid Kot Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-112',name:'Qadeer & Co.',date:'11-Jul-2008',mrs:'Mr. Salahuddin Mahmood, FCA (2020)',addr:'32 A Lawrence Road / Main Boulevard, Gulberg-III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-114',name:'Uzair Hammad Faisal & Co.',date:'31-Jul-2008',mrs:'Mr. Faisal Jalal, FCA (3612)',addr:'37-Main Gulberg',ph:'+92-42-35877470',ps:'V',em:'faisaljalal@uhf.com.pk',es:'V',web:'uhf.com.pk'},
+{code:'TO-117',name:'Phinehas & Co.',date:'17-Jul-2008',mrs:'Mr. Phinehas Salamat, FCA (2423)',addr:'F-105, Nawab Building, 48-Main Shadman Market',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-126',name:'Ishtiaq Rana & Co.',date:'05-Sep-2008',mrs:'Mr. Ishtiaq Ahmad Rana, FCA (3238)',addr:'6/B, Block H, Gulberg-III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-133',name:'M. R. M. E. & Co.',date:'20-Oct-2008',mrs:'Mr. Mudassar Raza, FCA (3324)',addr:'50/2, Lawrence Road, Faisal Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-134',name:'Sajid Iqbal & Co.',date:'30-Jun-2008',mrs:'Mr. Muhammad Iqbal Khan, FCA (1997)',addr:'House No. 415, B-Block, Fatima Jinnah Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-146',name:'ShineWing Hameed Chaudhri & Co.',date:'28-Jun-2008',mrs:'Mr. Osman Hameed Chaudhri, FCA (5938)',addr:'HM House, 7 Bank Square, Off The Mall',ph:'+92-42-37235084',ps:'V',em:'lhr@hccpk.com',es:'V',web:'hccpk.com'},
+{code:'TO-148',name:'Munawar Associates',date:'05-May-2008',mrs:'Mr. Munawar Hussain, FCA (1806)',addr:'25-Main Wahdat Road / 73-Main Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-149',name:'Nadeem & Co.',date:'23-Feb-2009',mrs:'Mr. Nadeem Butt, FCA (2875)',addr:'Taj Arcade, 3rd Floor, 73-Main Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-152',name:'Hameed Zahid & Co.',date:'21-Aug-2009',mrs:'Mr. Zahid Hameed, FCA (2374)',addr:'16/3 B, Eden Homes; 105-B, Gulberg-II',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-153',name:'Suriya Nauman Rehan & Co.',date:'03-Sep-2009',mrs:'Mr. Nauman Rafique, FCA (3495)',addr:'Suite #412, 4th Floor, Gulberg Arcade',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-154',name:'Talib Zafar Associates',date:'04-Dec-2009',mrs:'Mr. Zafar Iqbal, FCA (1973)',addr:"Ross Residencia, Canal Bank, Near Doctor's Hospital",ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-155',name:'Mian Naim Asif Rashid & Co.',date:'05-Jan-2010',mrs:'Mr. Sadiq M. Naim Mian, FCA (0491)',addr:'Adjacent to MCB House, Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-156',name:'Saeed Ul Hassan & Co.',date:'13-Feb-2010',mrs:'Mr. Saeed-ul-Hassan, FCA (0352)',addr:'27-C, TAMC Building, M. M. Alam Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-157',name:'Shafiq & Co.',date:'06-May-2010',mrs:'Mr. Muhammad Shafiq-ur-Rafique, FCA (2796)',addr:'Office #234-235, 2nd Floor, Land Mark Plaza, Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-158',name:'Rao & Company',date:'30-Jul-2010',mrs:'Mr. Nazir Ahmad Chaudhri, FCA (0982)',addr:'Gardee Investment Building, Napier Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-161',name:'Iqbal Yasir & Co.',date:'14-Jan-2011',mrs:'Mr. Muhammad Iqbal Khan, FCA (1997)',addr:'415, Block-B, Faisal Town; M. M. Alam Road',ph:'+92-42-35218637',ps:'V',em:'info@iyk.com.pk',es:'V',web:'iyk.com.pk'},
+{code:'TO-162',name:'Nasir Jamil & Co.',date:'06-Apr-2011',mrs:'Mr. Muhammad Waqas, FCA (10563)',addr:'2-G (2/7), Mushtaq Gormani Road, Gulberg II',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-165',name:'Zulfiqar Ahmad & Co.',date:'12-Jul-2011',mrs:'Mr. Zulfiqar Ahmad, FCA (2559)',addr:'72 Garden Block, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-170',name:'Muhammad Ali Hussain & Co.',date:'29-Dec-2011',mrs:'Mr. Ali Saif Cheema, FCA (4881)',addr:"Ross Residencia, Canal Bank, Near Doctor's Hospital",ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-173',name:'H. A. M. D. & Co.',date:'31-Jul-2012',mrs:'Mr. Waseem Ashfaq, FCA (2263)',addr:'2G (2/7), Mushtaq Ahmed Gurmani Road, Gulberg II',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-177',name:'A. D. Akhawala & Co.',date:'18-Jan-2013',mrs:'Mr. Rafqat Hussain, FCA (5536)',addr:'108 J/3, Model Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-178',name:'Mohsin & Co.',date:'08-Mar-2013',mrs:'Mr. Mohsin Nusrullah, FCA (3722)',addr:'150 Garden Block, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-179',name:'Junaidy Shoaib Asad',date:'24-May-2013',mrs:'Mr. Shoaib Ahmad Waseem, FCA (4424)',addr:'9-A, 3rd Floor, Imtiaz Plaza, 85-Shahra-e-Quaid-e-Azam',ph:'+92-42-36361176',ps:'V',em:'info.lhr@jsa.com.pk',es:'V',web:'jsa.com.pk'},
+{code:'TO-180',name:'A. Shahbaz & Co.',date:'28-Mar-2014',mrs:'Mr. Aamir Shahbaz, FCA (5222)',addr:'House No. 359, Block G3',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-181',name:'Hasnain Ali & Co.',date:'16-Apr-2014',mrs:'Mr. Hasnain Adam Ali, FCA (5628)',addr:'Room 202, Second Floor, Regency Plaza, Fakhr-e-Alam Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-182',name:'M. Imran Akhtar & Co.',date:'02-May-2014',mrs:'Mr. Muhammad Imran Akhtar, FCA (4505)',addr:'147-Shadman Colony 1, Gulberg III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-184',name:'Anwar Tariq & Co.',date:'13-Oct-2014',mrs:'Mr. Muhammad Shahid, FCA (9512)',addr:'84-B/I, Ghalib Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-187',name:'Tariq Aleem and Company',date:'02-Mar-2015',mrs:'Mr. Tariq Aleem, FCA (2517)',addr:'503-E, M. A. Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-188',name:'Saeed Methani Mushtaq & Co.',date:'13-Apr-2015',mrs:'Mr. Muhammad Ilyas, ACA (9479)',addr:'Suit No. 23-C, Block-B, Cantonment Board Plaza, Near Mini Market',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-190',name:'Atta Ullah & Co.',date:'25-May-2015',mrs:'Mr. Atta Ullah, FCA (2407)',addr:'Suite No. 10, 2nd Floor, Omer Arcade, Main Boulevard Gulberg III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-191',name:'Naveed Mukhtar & Co.',date:'16-Jul-2015',mrs:'Mr. Naveed Mukhtar Rana, FCA (4459)',addr:'12-A, First Floor (Rear Portion), New Muslim Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-192',name:'Nauman Javed Hasnain Rashid',date:'31-Dec-2015',mrs:'Mr. Muhammad Rashid Khan, FCA (6237)',addr:'Office No. 108-110, First Floor, Eden Center, 43-Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-194',name:'Ahsan & Ahsan',date:'01-Mar-2016',mrs:'Mr. Jalal Ahsan, FCA (2645)',addr:'119/120 Chuburji Park, Plot #193, Street #1',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-196',name:'A. H. W. & Co.',date:'15-Aug-2016',mrs:'Mr. Asad Rasul, FCA (8068)',addr:'AL-Hafeez Business Centre, 80-B/111, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-199',name:'Haroon Asim & Co.',date:'01-Aug-2016',mrs:'Mr. Muhammad Asim Iftikhar, ACA (4582)',addr:'Al-Faysal Plaza, Main Boulevard, Gulberg III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-200',name:'Izhar & Co.',date:'28-Sep-2016',mrs:'Mr. Izhar Ul Haq, FCA (6205)',addr:'Office #39, Ground Floor, Leads Center',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-201',name:'Alam & Aulakh',date:'15-Feb-2017',mrs:'Mr. Aqeel Alam, FCA (8716)',addr:"Ross Residencia, New-1 Campus, Canal Bank Road",ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-211',name:'Ubaid-Ur-Rehman & Co.',date:'08-Sep-2017',mrs:'Mr. Ubaid-ur-Rehman, FCA (8948)',addr:'Empress Tower, Empress Road; Block H 3, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-214',name:'Saad Zaman & Co.',date:'23-Jan-2018',mrs:'Mr. Saad Uz Zaman, FCA (8710)',addr:'Ground Floor, Arif Building, 13-Fane Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-215',name:'Fahad Sheraz & Co.',date:'05-Mar-2018',mrs:'Mr. Fahad Sheraz, FCA (8030)',addr:'Office No. F/16, First Floor, Expo Tower',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-218',name:'Yasir & Co.',date:'22-May-2018',mrs:'Mr. Yasir Fakhar, FCA (9408)',addr:'Office No. 22, First Floor, Khawaja Arcade, Wahdat Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-221',name:'Zahid Ali Faisal Asjad & Co.',date:'28-Sep-2018',mrs:'Mr. Zahid Noor Siddique, FCA (4915)',addr:'Office #6, 1st Floor, Cantonment Board Plaza, Tufail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-223',name:'Muhammad Usman & Co.',date:'22-Oct-2018',mrs:'Mr. Muhammad Usman Ali, FCA (8961)',addr:'Yousuf Islam House, 39 Link Farid Kot Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-225',name:'Irfan & Co.',date:'31-Jan-2019',mrs:'Mr. Irfan Ilyas, FCA (3395)',addr:'151-K, Model Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-227',name:'Taiyab Shahid & Co.',date:'14-Feb-2019',mrs:'Mr. Muhammad Taiyab, FCA (5229)',addr:'506, Eden Heights, 6-Main Gulberg, Jail Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-229',name:'Waqas Shabbir & Co.',date:'29-Mar-2019',mrs:'Mr. Waqas Shabbir Ahmed, FCA (8249)',addr:'2nd Floor, House #15, Street #28, Nabipura',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-232',name:'M. Khubaib & Co.',date:'27-Feb-2019',mrs:'Mr. Muhammad Khubaib, FCA (6397)',addr:'RB-2, 3rd Floor, Awami Complex, Barkat Market',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-233',name:'M. Amin & Co.',date:'09-Apr-2019',mrs:'Mr. Muhammad Amin, FCA (5250)',addr:'5th Floor, Aiwan-e-Iqbal Complex, Edgerton Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-235',name:'Arslan Mohsan & Co.',date:'19-Sep-2019',mrs:'Mr. Muhammad Arslan Mohsan, FCA (9201)',addr:'Suit #411, 4th Floor, Amman Business Center, Johar Town Phase 1',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-236',name:'S. M. A. R. T.',date:'26-Nov-2019',mrs:'Mr. Shamail Shahid, FCA (10251)',addr:'126 B-II, Johar Town, Near Sublime Chowk',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-241',name:'Aamir Rasheed & Co.',date:'19-Feb-2020',mrs:'Mr. Aamir Rasheed Rashid, FCA (5097)',addr:'F-3, Sea Breeze Homes, Al-Hameed Plaza',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-245',name:'Ghulam Ali & Co.',date:'14-Sep-2020',mrs:'Mr. Ghulam Ali, ACA (9307)',addr:'Central Plaza, Barkat Market, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-246',name:'Iqbal Associates',date:'22-Sep-2020',mrs:'Mr. Muhammad Iqbal, FCA (5613)',addr:'Office #15, Ist Floor, Saith Centre, Kashmir Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-249',name:'Rahat Aqeel & Co.',date:'22-Feb-2021',mrs:'Mr. Syed Rahat Ali Shah, FCA (5570)',addr:'175 C, OPF Housing Scheme, Khayaban-e-Jinnah Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-250',name:'Zafar & Co.',date:'11-Aug-2020',mrs:'Mr. Aqeel Zahid, FCA (6274)',addr:'OPF Housing Scheme, Khayaban-e-Jinnah Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-252',name:'Faiz & Co.',date:'15-Jan-2021',mrs:'Mr. Faisal Masood Afzal, FCA (3983)',addr:'468, G Block, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-256',name:'Asif Javed Associates',date:'09-Mar-2021',mrs:'Mr. Muhammad Asif Javed, FCA (8221)',addr:'2nd Floor, Royal Plaza, LDA Avenue One Chowk, Phase 1, DHA',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-257',name:'M. Irfan & Co.',date:'25-Jan-2021',mrs:'Mr. Mohammad Irfan, FCA (2412)',addr:'2nd Floor, Plaza No. 52, Sector K, Gulshan-e-Ravi',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-258',name:'Abdul Khaliq & Co.',date:'18-Jan-2021',mrs:'Mr. Abdul Khaliq, FCA (3047)',addr:'67-P, Gulberg-II / 66 Shadman Market',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-259',name:'Ali Akhtar Adnan',date:'24-May-2021',mrs:'Mr. Shahzad Akhtar, FCA (10129)',addr:'2nd Floor, Alam Centre, 66 Shadman Market',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-261',name:'A. Munawar & Co.',date:'28-Apr-2021',mrs:'Mr. Munawar Ali, FCA (1962)',addr:'2nd Floor, Alam Centre, 66 Shadman Market; Main Raiwind Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-262',name:'Saim & Co.',date:'06-Aug-2021',mrs:'Mr. Syed Saim Raza Zaidi, FCA (7454)',addr:'Suite No. 1, First Floor, RB4, Awami Complex, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-265',name:'Khalid Mehmood & Co.',date:'26-Aug-2021',mrs:'Mr. Khalid Mehmood, FCA (4910)',addr:'First Floor, RB #2, Awami Complex, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-268',name:'Majid Mahmood & Co.',date:'08-Oct-2021',mrs:'Mr. Majid Mahmood, FCA (8506)',addr:'Office No 10, 2nd Floor, Leeds Center, Main Boulevard, Gulberg III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-269',name:'Shahbaz Hannan & Co.',date:'22-Oct-2021',mrs:'Mr. Muhammad Shahbaz Saeed, ACA (11100)',addr:'36, G Block, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-270',name:'Ikraam & Co.',date:'09-Nov-2021',mrs:'Mr. Ikraam Abbas, ACA (9552)',addr:'67-K, Commercial, Ghazi Road, DHA',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-273',name:'Abdul Rahman & Co.',date:'16-Dec-2021',mrs:'Mr. Abdul Rahman, FCA (7873)',addr:'154 M, Model Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-275',name:'Haroon Malik & Co.',date:'08-Nov-2021',mrs:'Mr. Malik Haroon Ahmad, FCA (3504)',addr:'25G, Gulberg II, New Climate Plaza',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-278',name:'Arslan Younas & Co.',date:'24-Jan-2022',mrs:'Mr. Arslan Younas, FCA (9260)',addr:'Room 322, Farid Kot Road, Phase I',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-281',name:'Fatima & Company',date:'05-Apr-2022',mrs:'Ms. Fatima Shumaila, ACA (9846)',addr:'235-Ahmed Block, Garden Town, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-282',name:'Ahsan & Co.',date:'07-Apr-2022',mrs:'Mr. Muhammad Ahsan, FCA (9539)',addr:'House #51, C Block, Faisal Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-283',name:'Z. M. T. & Co.',date:'14-Apr-2022',mrs:'Mr. Muhammad Mehran ur Rashid, ACA (11597)',addr:'251-L Block, Near Emporium Mall',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-284',name:'M. Salman & Co.',date:'21-Mar-2022',mrs:'Mr. Muhammad Salman, FCA (10301)',addr:'243/A, Block E, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-285',name:'A. Haider & Co.',date:'13-Jun-2022',mrs:'Mr. Anwaar Haider, ACA (10891)',addr:'4th Floor, Rose Residentia, Canal Bank Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-291',name:'Usman Zafar & Co.',date:'31-Oct-2022',mrs:'Mr. Usman Zafar, FCA (6989)',addr:'E-154/D, Ghazni Lane, New Super Town, DHA Main Boulevard',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-293',name:'G. Ali & Co.',date:'26-Dec-2022',mrs:'Mr. Ghulam Ali, ACA (9312)',addr:'Suite #2, Second Floor, MK Arcade, 32-Davis Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-295',name:'A. Chughtai & Co.',date:'22-Dec-2022',mrs:'Mr. Amir Chughtai, ACA (6104)',addr:'Ground Floor, 235-Ahmed Block',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-296',name:'H. O. A.',date:'20-Jan-2023',mrs:'Mr. Osama Mahmood, ACA (10264)',addr:'First Floor, 52-F, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-299',name:'Sajid Zia & Co.',date:'07-Dec-2022',mrs:'Mr. Muhammad Sajid Zia, FCA (10268)',addr:'227-C, First Floor, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-302',name:'M. Sochan & Co.',date:'18-May-2023',mrs:'Mr. Muhammad Sochan, FCA (9922)',addr:'PAEC Foundation Housing Project, Adjacent Al-Jannat Fort',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-304',name:'Adnan Hameed Khokhar & Co.',date:'27-Mar-2023',mrs:'Mr. Adnan Hameed Khokhar, FCA (9759)',addr:'FF-287, Q-Commercial, Phase-II, DHA',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-306',name:'Mahmood Ahmad & Co.',date:'17-Jul-2023',mrs:'Mr. Mahmood Ahmad Siddiqui, FCA (8984)',addr:'Office No. 47, 3rd Floor, Sadiq Plaza, 69 Mall Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-311',name:'Faisal Nawaz & Co.',date:'18-Dec-2023',mrs:'Mr. Faisal Nawaz, FCA (5090)',addr:'Office No. 102, First Floor, Building No. 21 C, A1 Block, Valencia Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-312',name:'Muhammad Afzal & Co.',date:'14-Jul-2023',mrs:'Mr. Muhammad Afzal, ACA (8462)',addr:'CC-11, Central Plaza, Barkat Market, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-313',name:'R. K. & Company',date:'15-Dec-2023',mrs:'Mr. Syed Kumail Mohammad, ACA (11301)',addr:'4th Floor, Global Heights, Ferozpur Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-314',name:'Sohail & Co.',date:'04-Jan-2024',mrs:'Mr. Muhammad Sohail Ahmad, FCA (8988)',addr:'548A, C Block, Pak Arab Housing Society, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-316',name:'Wahab Saleem & Co.',date:'15-Jan-2024',mrs:'Mr. Raja Wahab Saleem, ACA (9851)',addr:'97 A, Bridge Colony, Street No. 28, Gulberg-3',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-317',name:'M. Imtiaz & Co.',date:'22-Jan-2024',mrs:'Mr. Muhammad Imtiaz, ACA (12182)',addr:'House No. 15, 2nd Floor, Madina Town, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-319',name:'Ghaus Muhammad Jameel & Co.',date:'25-Jan-2024',mrs:'Mr. Ghaus Muhammad Jameel, ACA (11357)',addr:'167-A, G-1, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-320',name:'Imran Mehmood & Co.',date:'31-Jan-2024',mrs:'Mr. Imran Mahmood Khan, FCA (8413)',addr:'420-B, Central Park, Main Ferozpur Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-324',name:'M. A. S. H. & Co.',date:'01-Jul-2024',mrs:'Mr. Muhammad Arslan Mohsan, FCA (9201)',addr:'248-E, Maulana Shaukat Ali Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-332',name:'R. M. Tahir & Co.',date:'17-Feb-2025',mrs:'Mr. Rana Muhammad Tahir, FCA (10064)',addr:'2nd Floor, Bilal Centre, 6 Fane Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-333',name:'Hafiz Muhammad Zubair & Co.',date:'23-Dec-2024',mrs:'Mr. Hafiz Muhammad Zubair, ACA (12522)',addr:'110 Garden Block, New Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-335',name:'AbuBaker Jatoi & Co.',date:'17-Feb-2024',mrs:'Mr. Muhammad Abubaker Jatoi, ACA (12479)',addr:'Al-Hafeez Heights, Opp. Imtiaz Express',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-337',name:'Sanan Javid & Co.',date:'24-Feb-2025',mrs:'Mr. Sanan Javid, ACA (10898)',addr:'53/A, L Block, Near Emporium Mall, Model Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-338',name:'M. S. Butt & Co.',date:'28-Feb-2025',mrs:'Mr. Muhammad Salman Butt, ACA (10306)',addr:'163-H/1, First Floor, Model Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-339',name:'Naeem & Co.',date:'10-Apr-2025',mrs:'Mr. Muhammad Naeem, FCA (10135)',addr:'Suite #10 & 11, 2-BD Block, Floor 4th, Ross Residencia',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-340',name:'Rashid Rafique & Co.',date:'16-Apr-2025',mrs:'Mr. Rashid Rafique, FCA (8801)',addr:'Govt. Employee Corp Housing Society Phase-III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-342',name:'S. Amer Associates',date:'21-May-2025',mrs:'Mr. Shahzad Amer, FCA (6232)',addr:'589 A-1, Township, Susan Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-345',name:'Reanda Haroon Zakaria Aamir Salman Rizwan & Co.',date:'27-Jun-2025',mrs:'Mr. Ahmad Salman Arshad, FCA (6574)',addr:'275, H-1 Block, M. A. Johar Town',ph:'',ps:'N',em:'info@hzco.com.pk',es:'V',web:'hzco.com.pk'},
+{code:'TO-348',name:'Sibghat & Co.',date:'11-Jul-2025',mrs:'Mr. Muhammad Sibghatullah Khalid, FCA (5372)',addr:'Wahid Chambers, Noor Jahan Road, Civil Lines Quarter',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-349',name:'Rashid Shuja & Co.',date:'11-Jul-2025',mrs:'Ms. Tayyaba Umbreen, ACA (6151)',addr:"Ross Residencia, Near Doctor's Hospital",ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-351',name:'M. Khan & Co.',date:'06-Aug-2025',mrs:'Mr. Mohammad Khan, ACA (10561)',addr:"Queen's Centre 33, Shahrah-e-Fatima Jinnah",ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-353',name:'Majid Asghar & Co.',date:'07-Aug-2025',mrs:'Mr. Majid Asghar, ACA (9051)',addr:'540-G, Johar Town, Phase I',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-354',name:'Resilience A. Farhan & Co.',date:'19-Aug-2025',mrs:'Mr. Farhan Ali, FCA (4430)',addr:'720/G4, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-358',name:'A. R. Arfan & Co.',date:'09-Sep-2025',mrs:'Mr. Abdul Rehman Arfan, ACA (12801)',addr:'Office #265-E, Trust Plaza, Abdullah Haroon Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-361',name:'Asim Nazir & Co.',date:'03-Oct-2025',mrs:'Mr. Asim Nazir Sheikh, FCA (4328)',addr:'Office #307, 3rd Floor, Garden Tower, Garden Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-362',name:'S. Mubeen & Co.',date:'08-Oct-2025',mrs:'Mr. Azhar Hafeez, ACA (12948)',addr:'77 Block J, Gulberg-III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-366',name:'M. F. & Co.',date:'09-Dec-2025',mrs:'Mr. Muhammad Amad Sohail, ACA (11609)',addr:'139, Block F, Phase 5, DHA',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-368',name:'Hamza Arqum & Co.',date:'09-Dec-2025',mrs:'Mr. Arqum Naveed, ACA (10770)',addr:'265, E Block, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-369',name:'Mohsin Ali and Co.',date:'08-Jan-2026',mrs:'Mr. Mohsin Ali, ACA (12965)',addr:'10-B, G.E.C.H.S., Phase 3, Model Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-370',name:'Tahir Farid & Co.',date:'08-Jan-2026',mrs:'Mr. Tahir Farid, ACA (13649)',addr:'Office No 17, 3rd Floor, Leeds Center, Gulberg III',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-374',name:'Amir Amin Rehman & Co.',date:'16-Feb-2026',mrs:'Mr. Amir Nawaz, ACA (10267)',addr:'Plaza No. 8, Commercial Zone, Block J-1, Johar Town',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-375',name:'Mohammed Ahsan & Co.',date:'02-Mar-2026',mrs:'Mr. Ubaid-ur-Rehman, FCA (8948)',addr:'SF 27, 2nd Floor, Empress Tower, Empress Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-376',name:'Munawar Sadaf Associates',date:'20-Apr-2026',mrs:'Mr. Munawar Hussain, FCA (1806)',addr:'Office No. 05, 3rd Floor, Abrar Center, Main Wahdat Road',ph:'',ps:'N',em:'',es:'N',web:''}
+];
+
+const I=[
+{code:'TO-001',name:'Hussain Rathore & Co.',date:'01-Apr-2006',mrs:'Mr. Ejaz Hussain Rathore, FCA (1789)',addr:'32, Block 8, School Road, Super Market, F-6 Markaz',ph:'+92-51-2825775',ps:'V',em:'info@hrco.pk',es:'V',web:'hrco.pk'},
+{code:'TO-003',name:'EY Ford Rhodes',date:'28-Apr-2006',mrs:'Mr. Muhammad Imtiaz Aslam, FCA (2849)',addr:'74-East, 2nd Floor, Blue Area, Jinnah Avenue',ph:'+92-51-23882018',ps:'V',em:'eyfrsh.isb@pk.ey.com',es:'V',web:'ey.com'},
+{code:'TO-005',name:'Rafaqat Mansha Mohsin Dossani Masoom & Co.',date:'26-Jul-2006',mrs:'Mr. Muhammad Masood, FCA (2283)',addr:'Randhawa Tower, Central Commercial Area',ph:'',ps:'N',em:'',es:'N',web:'mmdk.com.pk'},
+{code:'TO-007',name:'KPMG Taseer Hadi & Co.',date:'12-May-2006',mrs:'Mr. Muhammad Faisal Banday, FCA (3600)',addr:'6th Floor, State Life Building No.5, Jinnah Avenue',ph:'+92-51-2823558',ps:'V',em:'islamabad@kpmg.com',es:'V',web:'kpmg.com.pk'},
+{code:'TO-009',name:'RSM Avais Hyder Liaquat Nauman',date:'26-Sep-2006',mrs:'Mr. Imran Ilyas, FCA (2984)',addr:'Office #26, 2nd Floor, Rose Plaza, I-8 Markaz',ph:'+92-51-2340490',ps:'V',em:'islamabad@rsmpakistan.pk',es:'V',web:'rsm.global/pakistan'},
+{code:'TO-010',name:'Ilyas Saeed & Co.',date:'02-Dec-2006',mrs:'Mr. Imran Ilyas, FCA (2984)',addr:'Office No.12,13 & 14, Rose Plaza, I-8 Markaz',ph:'+92-51-4938026',ps:'V',em:'info@ilyassaeed.com',es:'V',web:'ilyassaeed.com'},
+{code:'TO-011',name:'HLB Ijaz Tabussum & Co.',date:'13-Dec-2006',mrs:'Mrs. Saira Muddassar, FCA (4547)',addr:'303, Sawan Road, G-10/1; 1st Floor, Panther Plaza, F-8',ph:'+92-51-32354801',ps:'V',em:'ia@hlbitc.com',es:'V',web:'hlbitc.com'},
+{code:'TO-014',name:'Yousuf Adil',date:'01-Nov-2020',mrs:'Mr. Shahzad Ali, FCA (3063)',addr:'Chohan Mansion, G-8 Markaz',ph:'+92-51-8734400',ps:'V',em:'',es:'N',web:'yousufadil.com'},
+{code:'TO-021',name:'Naveed Zafar Ashfaq Jaffery & Co.',date:'17-Feb-2007',mrs:'Mr. Raheel Arshad, FCA (4937)',addr:'2-B, ATS Centre, 30-West, Fazal-ul-Haq Road',ph:'',ps:'N',em:'khi@nzaj.com.pk',es:'V',web:'nzaj.com.pk'},
+{code:'TO-022',name:'Riaz Ahmad & Co.',date:'06-Mar-2007',mrs:'Mr. Raheel Arshad, FCA (4937)',addr:'2-A, ATS Center, 30 West, Fazal-ul-Haq Road',ph:'+92-51-2274121',ps:'V',em:'racoisd@racopk.com',es:'V',web:'racopk.com'},
+{code:'TO-023',name:'Viqar A. Khan & Co.',date:'27-Mar-2007',mrs:'Mr. Muhammad Waqas, FCA (7592)',addr:'20th Floor, Bahria Town Tower, Block A, Blue Area',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-029',name:'Omer Adil & Co.',date:'21-May-2007',mrs:'Mr. Omer Adil, FCA (3392)',addr:'Office 2, First Floor, Shaheen One Plaza, D-2 Markaz',ph:'',ps:'N',em:'',es:'N',web:'omeradil.com'},
+{code:'TO-030',name:'Crowe Hussain Chaudhury & Co.',date:'16-May-2007',mrs:'Mr. Shahzad Qazi, FCA (1743)',addr:'Office #13, First Floor, Ahmed Centre, I-8 Markaz',ph:'+92-51-4938139',ps:'V',em:'crowe@crowe.pk',es:'V',web:'crowe.pk'},
+{code:'TO-031',name:'BDO Ebrahim & Co.',date:'18-May-2007',mrs:'Mr. Muhammad Imran, FCA (6028)',addr:'Apartment #2, Ground Floor, Ross Residencia, Canal Bank',ph:'',ps:'N',em:'info@bdo.com.pk',es:'V',web:'bdo.com.pk'},
+{code:'TO-032',name:'Malik & Co.',date:'23-May-2007',mrs:'Mr. Zulfikar Ali Causer, FCA (4518)',addr:'2nd Floor, Block-C, Lakson Square Bldg.',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-033',name:'Shahzad Qazi & Co.',date:'23-May-2007',mrs:'Mr. Shahzad Qazi, FCA (1743)',addr:'Ahmed Center, I-8 Markaz',ph:'+92-51-4444009',ps:'L',em:'sq1960@comsats.net.pk',es:'L',web:''},
+{code:'TO-034',name:'Yaqub & Co.',date:'23-May-2007',mrs:'Mr. Muhammad Yaqub, FCA (1365)',addr:'374-A, 1st Floor, Peoples Colony #2',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-036',name:'Muniff Ziauddin & Co.',date:'28-May-2007',mrs:'Mr. Shahid Farid, FCA (2845)',addr:'Second Floor, Professional Arcade, Sector E-11/3',ph:'',ps:'N',em:'info@mzco.com.pk',es:'V',web:'mzco.com.pk'},
+{code:'TO-038',name:'Grant Thornton Anjum Rahman',date:'02-May-2007',mrs:'Mr. Nadeem Tirmizi, FCA (1854)',addr:'Evacuee Trust Complex, Aga Khan Road, F-5/1',ph:'+92-51-8440015',ps:'V',em:'islamabad@gtpak.com',es:'V',web:'grantthornton.pk'},
+{code:'TO-058',name:'Sarwar Awan & Co.',date:'22-May-2007',mrs:'Mr. Imran-ul-Haq, FCA (2355)',addr:'Office #17, 2nd Floor, Ace Upton-2, Ellander Road, E-11',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-059',name:'M. A. Chaudhri & Co.',date:'05-Jun-2007',mrs:'Mr. Nasir Gulzar, FCA (1682)',addr:'Office #2, 2nd Floor, Hill View Plaza, Blue Area',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-061',name:'Azhar Zafar & Co.',date:'14-Dec-2011',mrs:'Mr. Muhammad Masood Shahid, FCA (7879)',addr:'Hill View Plaza, Blue Area',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-066',name:'Tanzeem & Co.',date:'22-Jun-2007',mrs:'Mr. Syed Tanzeem Husain Zaidi, FCA (1337)',addr:'Suite #6, 2nd Floor, Kashif Center, I & T Centre, G-10/4',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-080',name:'UHY Hassan Naeem & Co.',date:'19-Dec-2007',mrs:'Mr. Muddasar Khalid, FCA (5768)',addr:'West Lower Ground, 402, Progressive Centre, Fazal-e-Haq Road',ph:'+92-51-2873431',ps:'V',em:'infoisb@uhy-hnco.com',es:'V',web:'uhy-hnco.com'},
+{code:'TO-089',name:'Amin & Co.',date:'06-Mar-2008',mrs:'Mr. Saeed-ur-Rahman, FCA (1888)',addr:'House No. 4, Street 60, F-7/4',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-092',name:'Zahid Farooq & Co.',date:'20-Mar-2008',mrs:'Mr. Zahid Farooq, FCA (3988)',addr:'Suit No. 31, Ground Floor, Twin City Plaza, Faiz Abad',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-125',name:'Masoom Akhtar & Co.',date:'04-Aug-2008',mrs:'Mr. Masoom Akhtar, FCA (1954)',addr:'Office 611, 6th Floor, ISE Towers, Jinnah Avenue',ph:'+92-51-2273126',ps:'L',em:'smasoomakhtar@yahoo.com',es:'L',web:''},
+{code:'TO-148',name:'Munawar Associates',date:'05-May-2008',mrs:'Mr. Munawar Hussain, FCA (1806)',addr:'House #726, Street 34, Margalla Town, Off Muree Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-151',name:'Riaz & Co.',date:'01-Apr-2009',mrs:'Mr. Arsalan Salahuddin Vardag, FCA (3330)',addr:'2, Street 80, G-6/4',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-153',name:'Suriya Nauman Rehan & Co.',date:'03-Sep-2009',mrs:'Mr. Muhammad Safder, FCA (4493)',addr:'House No. 2, Street 2, F-7/3',ph:'+92-51-32610931',ps:'V',em:'nauman@nrcca.pk',es:'V',web:'nrcca.pk'},
+{code:'TO-154',name:'Talib Zafar Associates',date:'04-Dec-2009',mrs:'Mr. Zafar Iqbal, FCA (1973)',addr:'Suite #412, 4th Floor, Gulberg Arcade',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-166',name:'Asif Associates',date:'18-Oct-2011',mrs:'Mr. Muhammad Asif Raza, FCA (3030)',addr:'72 West, 2nd Floor, Benazir Plaza, Jinnah Avenue',ph:'+92-51-2806181',ps:'L',em:'asif@argroup.com',es:'L',web:''},
+{code:'TO-172',name:'Faisal Latif & Co.',date:'17-May-2012',mrs:'Mr. Faisal Latif, FCA (3519)',addr:'Suit #202, 1st Floor, Kashif Plaza, G-8 Markaz',ph:'+92-51-2280226',ps:'L',em:'',es:'N',web:''},
+{code:'TO-173',name:'H. A. M. D. & Co.',date:'31-Jul-2012',mrs:'Mr. Muhammad Asif Raza, FCA (3030)',addr:'2nd Floor, Benazir Plaza, Fazal-e-Haq Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-176',name:'Rafqat Hussain & Co.',date:'31-Dec-2012',mrs:'Mr. Arsalan Salahuddin Vardag, FCA (3330)',addr:'2nd Floor, Rafi Centre, Street No. 28, G-7/1',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-179',name:'Junaidy Shoaib Asad',date:'24-May-2013',mrs:'Mr. Rukhsar Ahmed, FCA (5746)',addr:'77-A, Street #45, F-10/4',ph:'+92-51-8356316',ps:'V',em:'info@jsa.com.pk',es:'V',web:'jsa.com.pk'},
+{code:'TO-187',name:'Tariq Aleem and Company',date:'02-Mar-2015',mrs:'Mr. Muhammad Javed Iqbal Khan, FCA (3588)',addr:'Office #1, 2nd Floor, VIP Square, I-8 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-193',name:'Masood Pervaiz & Co.',date:'12-Feb-2016',mrs:'Mr. Masood Pervaiz, FCA (4212)',addr:'3rd Floor, Al Rehman Chamber, Fazl-e-Haq Road, Blue Area',ph:'+92-51-2605672',ps:'V',em:'info@themp.co.com',es:'V',web:'themp-co.com'},
+{code:'TO-195',name:'Peter & Co.',date:'27-Jul-2016',mrs:'Mr. Oliver Peter Pervez, FCA (2150)',addr:'1st Floor, 22-Queens Road',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-198',name:'Mian Saleem & Co.',date:'05-Dec-2016',mrs:'Mr. Mohammad Saleem, FCA (1058)',addr:'Plot No. 35, I & T Centre, G-8/4',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-205',name:'Afrasiab Tanveer & Co.',date:'25-Nov-2016',mrs:'Mr. Tanveer Asif Khan, FCA (6830)',addr:'Office No.12, 2nd Floor, Albabar Center, F-8 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-206',name:'Asad Ijaz & Co.',date:'14-Apr-2017',mrs:'Mr. Asad Ijaz, FCA (8173)',addr:'Unit 2, Tariq Heights, Street 73, F-11/1',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-207',name:'Khilji Rahat Waheed',date:'08-May-2017',mrs:'Mr. Muhammad Waheed Iqbal, FCA (4766)',addr:'3rd Floor, Rafi Centre, Plot No. 13, Street No. 28, G-7/1',ph:'+92-51-2718336',ps:'V',em:'info@krw.com.pk',es:'V',web:'krw.com.pk'},
+{code:'TO-208',name:'Nadeem Safdar & Co.',date:'15-Feb-2017',mrs:'Mr. Nadeem Safdar, FCA (2396)',addr:'Office No. 2, 1st Floor, VIP Square, I-8 Markaz',ph:'+92-51-8431604',ps:'V',em:'',es:'N',web:''},
+{code:'TO-212',name:'Ghazanfar Nauman & Co.',date:'18-Jul-2017',mrs:'Mr. Ghazanfar Nauman, FCA (5526)',addr:'Office No. 3, 2nd Floor, Al-Asad Plaza, F-10 Markaz',ph:'+92-321-5366207',ps:'L',em:'ghazanfarg@hotmail.com',es:'L',web:''},
+{code:'TO-219',name:'Obaid Associates',date:'30-Jul-2018',mrs:'Mr. Obaid-ur-Rehman, FCA (6042)',addr:'Flat #3, 1st Floor, Rawal Arcade, F-8 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-226',name:'Qasim Adeel & Co.',date:'04-Feb-2019',mrs:'Mr. Muhammad Bin Qasim, FCA (9780)',addr:'16th Floor, State Life Building #5, F-6',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-228',name:'Noman Tahir & Co.',date:'18-Mar-2019',mrs:'Mr. Noman Tahir, ACA (9768)',addr:'Apartment 407, Millennium Heights, F-11/1',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-231',name:'Z.U.M.I.R.S.',date:'22-Mar-2019',mrs:'Mr. Ale Imran Siddiqi, FCA (2262)',addr:'Office No. 123, 1st Floor, Luxus Mall, Expressway',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-243',name:'Hina Shahrukh & Co.',date:'12-Jun-2020',mrs:'Ms. Hina Shahrukh, FCA (7921)',addr:'Office No. 1, 2nd Floor, G-11 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-247',name:'Usman Hassan & Co.',date:'28-Sep-2020',mrs:'Mr. Usman Hassan, FCA (4287)',addr:'Office No. 22, Second Floor, Rehmat Plaza, I-8 Markaz',ph:'+92-51-2222594',ps:'L',em:'usmangfatm@gmail.com',es:'L',web:''},
+{code:'TO-253',name:'Usman Zulfiqar & Co.',date:'27-Jan-2021',mrs:'Mr. Usman Zulfiqar, FCA (10261)',addr:'House No. 839, Street 02, Sector G-14/4',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-272',name:'Agha Mujeeb & Co.',date:'13-Dec-2021',mrs:'Mr. Agha Mujeeb Ahmed Khan, FCA (3202)',addr:'Suit #31, Ground Floor, Twin City Plaza, Blue Area',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-274',name:'Muhammad Umair & Co.',date:'08-Nov-2021',mrs:'Mr. Muhammad Umair, ACA (9212)',addr:'3rd Floor, New Climate Plaza, Jinnah Avenue',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-276',name:'Shafiq Umar Daraz & Co.',date:'23-Dec-2021',mrs:'Mr. Umar Daraz, FCA (5137)',addr:'1407, ISE Towers; 3rd Floor, Arooj Center, Faizabad',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-277',name:'Murad Ali & Co.',date:'27-Jan-2022',mrs:'Mr. Murad Ali, FCA (4788)',addr:'Office 2, First Floor, Street 36, G-13/2',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-286',name:'Tahseen Rehman & Co.',date:'30-Mar-2021',mrs:'Mr. Muhammad Tahseen-ur-Rehman, FCA (9534)',addr:'5th Floor, Plaza 51, Midwest Heights, Bahria Enclave',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-289',name:'Azeemullah & Co.',date:'12-Sep-2022',mrs:'Mr. Azeem Ullah, FCA (7588)',addr:'Plot No. 80, Street No. 34, Opp. Islamabad High Court',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-292',name:'Muhammad Mudasser & Co.',date:'23-Sep-2022',mrs:'Mr. Muhammad Mudasser, FCA (7290)',addr:'Plot 24, Street 52, Sector F-11/3',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-294',name:'Imran Ahmad Khan & Co.',date:'17-Oct-2022',mrs:'Mr. Imran Ahmad Khan, FCA (3764)',addr:'Office No. 4A, 4th Floor, IK Plaza, Sector E-11/3',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-303',name:'Abdullah Shahid & Co.',date:'05-Jun-2023',mrs:'Mr. Abdullah Shahid, ACA (11691)',addr:'13 Street 3A, Sector D, DHA Phase-II',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-308',name:'Tariq Iqbal & Associates',date:'02-Nov-2023',mrs:'Mr. Tariq Iqbal, FCA (6009)',addr:'Abudhabi Towers, Block A, 5th Floor, F-11 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-309',name:'Sohaib Saleem Dar & Co.',date:'04-Aug-2023',mrs:'Mr. Sohaib Saleem Dar, FCA (7636)',addr:'Fazal Technology Park, I-9/3, Khayaban-e-Johar',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-325',name:'Jamal A. Nasir',date:'19-Jul-2024',mrs:'Mr. Jamal Abdul Nasir, FCA (6568)',addr:'Office No. 14, 2nd Floor, Anique Plaza, I-8 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-341',name:'A. B. M. & Co.',date:'29-Apr-2025',mrs:'Mr. Azeem Ullah, FCA (7588)',addr:'1st Floor, Plot #80, St #34, I & T Centre, Opp. Islamabad High Court',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-344',name:'Asad Fouad',date:'13-Jun-2025',mrs:'Mr. Asad Azam, FCA (2636)',addr:'406, Dossul Arcade, Canal Road, G-10/1',ph:'+92-51-2875770',ps:'L',em:'asadazam@yahoo.com',es:'L',web:''},
+{code:'TO-349',name:'Rashid Shuja & Co.',date:'11-Jul-2025',mrs:'Mr. Muhammad Sibghatullah Khalid, FCA (5372)',addr:'Office #204-A, 2nd Floor, Pacific Centre, F-8 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-352',name:'Rizwan Saeed & Co.',date:'07-Aug-2025',mrs:'Mr. Rizwan Saeed, FCA (7641)',addr:'Office No.1, 2nd Floor, VIP Square, I-8 Markaz',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-363',name:'Muhammad Abbas & Co.',date:'14-Oct-2025',mrs:'Mr. Muhammad Abbas, FCA (9535)',addr:'2nd Floor, Jaspal Arcade, Street 22, G-8/4',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-364',name:'Abdullah & Co.',date:'27-Oct-2025',mrs:'Mr. Abdullah, ACA (9794)',addr:'Lower Ground, Leads Arcade, Khyber Market, G13/4',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-365',name:'Zainab & Company',date:'24-Nov-2025',mrs:'Ms. Zainab Iqbal Bhatti, FCA (6168)',addr:'Suit 237, 2nd Floor, Luxus Mall, Gulberg Greens',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-373',name:'Tanveer Faisal & Co.',date:'12-Feb-2026',mrs:'Mr. Khawaja Tanveer Ali Mir, FCA (9368)',addr:'3144, 3rd Floor, World Trade Centre, Giga Mall, DHA Phase-II',ph:'',ps:'N',em:'',es:'N',web:''},
+{code:'TO-378',name:'Atif Faisal & Co.',date:'13-May-2026',mrs:'Mr. Muhammad Atif Aman, ACA (9499)',addr:'2nd Floor, Plot #88, Chinar Road, Sector I-10/3',ph:'',ps:'N',em:'',es:'N',web:''}
+];
+
+// ═══════════════════════════════════════════
+//  LOOKUP MAPS
+// ═══════════════════════════════════════════
+const LM={},IM={};
+L.forEach(r=>LM[r.code]=r);
+I.forEach(r=>IM[r.code]=r);
+const getRow=(c,k)=>c==='l'?LM[k]:IM[k];
+
+// ═══════════════════════════════════════════
+//  HTML HELPERS
+// ═══════════════════════════════════════════
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function rCell(city,code,field,base,stat){
+  const ed=gv(city,code,field);
+  const val=ed!==undefined?ed:(base||'');
+  const st=ed!==undefined?'E':(stat||'N');
+  const labels={V:'✓ Verified',L:'⚠ Legacy',E:'✏ Edited'};
+  const cls={V:'sb sv',L:'sb sl',E:'sb se'};
+  if(!val) return `<span class="ce">— <small>click to add</small></span>`;
+  return `<span class="cv">${esc(val)}</span>`+(st!=='N'?`<span class="${cls[st]||''}">${labels[st]||''}</span>`:'');
+}
+
+function rWeb(city,code,base){
+  const ed=gv(city,code,'web');
+  const val=ed!==undefined?ed:(base||'');
+  if(!val) return `<span class="ce">— <small>click to add</small></span>`;
+  const hr=val.startsWith('http')?val:'https://'+val;
+  const isEd=ed!==undefined;
+  return `<a class="wl" href="${hr}" target="_blank" rel="noopener">${esc(val)}</a>`+(isEd?` <span class="sb se">✏ Edited</span>`:'');
+}
+
+function buildRow(r,i,city){
+  return `<tr>
+    <td style="vertical-align:middle;white-space:nowrap">${i+1}</td>
+    <td style="vertical-align:middle"><span class="tc">${esc(r.code)}</span></td>
+    <td><span class="tn">${esc(r.name)}</span></td>
+    <td class="td">${esc(r.date)}</td>
+    <td class="tm">${esc(r.mrs)}</td>
+    <td class="ta">${esc(r.addr)}</td>
+    <td class="ec" data-c="${city}" data-k="${esc(r.code)}" data-f="ph" onclick="startEdit(this)">${rCell(city,r.code,'ph',r.ph,r.ps)}</td>
+    <td class="ec" data-c="${city}" data-k="${esc(r.code)}" data-f="em" onclick="startEdit(this)">${rCell(city,r.code,'em',r.em,r.es)}</td>
+    <td class="ec" data-c="${city}" data-k="${esc(r.code)}" data-f="web" onclick="startEdit(this)">${rWeb(city,r.code,r.web)}</td>
+  </tr>`;
+}
+
+function render(){
+  document.getElementById('lt').innerHTML=L.map((r,i)=>buildRow(r,i,'l')).join('');
+  document.getElementById('it').innerHTML=I.map((r,i)=>buildRow(r,i,'i')).join('');
+  document.getElementById('lct').textContent=L.length+' Offices';
+  document.getElementById('ict').textContent=I.length+' Offices';
+  document.getElementById('s1').textContent='Lahore: '+L.length+' TOs';
+  document.getElementById('s2').textContent='Islamabad: '+I.length+' TOs';
+  updateCount();
+}
+
+// ═══════════════════════════════════════════
+//  INLINE EDITING
+// ═══════════════════════════════════════════
+let ctxTd=null;
+
+function startEdit(td){
+  if(td.querySelector('input'))return;
+  const {c,k,f}=td.dataset;
+  const row=getRow(c,k);
+  if(!row)return;
+  const ed=gv(c,k,f);
+  const baseVal=f==='ph'?row.ph:f==='em'?row.em:row.web;
+  const cur=ed!==undefined?ed:(baseVal||'');
+  const ph=f==='ph'?'+92-4x-xxxxxxx':f==='em'?'name@firm.com':'www.firm.com';
+  const inp=document.createElement('input');
+  inp.className='ei'; inp.value=cur; inp.placeholder=ph;
+  td.innerHTML=''; td.appendChild(inp);
+  inp.focus(); inp.select();
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter') inp.blur();
+    if(e.key==='Escape') refreshTd(td,c,k,f,row);
+  });
+  inp.addEventListener('blur',()=>{
+    sv(c,k,f,inp.value.trim());
+    refreshTd(td,c,k,f,row);
+  });
+}
+
+function refreshTd(td,c,k,f,row){
+  if(f==='web') td.innerHTML=rWeb(c,k,row.web);
+  else td.innerHTML=rCell(c,k,f,f==='ph'?row.ph:row.em,f==='ph'?row.ps:row.es);
+}
+
+// Context menu
+document.addEventListener('contextmenu',e=>{
+  const td=e.target.closest('.ec');
+  if(!td){hideCtx();return;}
+  e.preventDefault(); ctxTd=td;
+  const m=document.getElementById('ctx');
+  m.style.left=Math.min(e.clientX,window.innerWidth-180)+'px';
+  m.style.top=Math.min(e.clientY,window.innerHeight-120)+'px';
+  m.classList.add('on');
+});
+document.addEventListener('click',hideCtx);
+document.addEventListener('scroll',hideCtx,{passive:true});
+function hideCtx(){document.getElementById('ctx').classList.remove('on');ctxTd=null;}
+
+function cCopy(){
+  if(!ctxTd)return;
+  const {c,k,f}=ctxTd.dataset; const row=getRow(c,k);
+  const ed=gv(c,k,f); const base=f==='ph'?row?.ph:f==='em'?row?.em:row?.web;
+  const v=ed!==undefined?ed:(base||'');
+  if(v) navigator.clipboard.writeText(v).catch(()=>{});
+  hideCtx();
+}
+function cReset(){
+  if(!ctxTd)return;
+  const {c,k,f}=ctxTd.dataset; const o=ge(); delete o[c+':'+k+':'+f]; se(o);
+  const row=getRow(c,k); refreshTd(ctxTd,c,k,f,row); hideCtx();
+}
+function cClear(){
+  if(!ctxTd)return;
+  const {c,k,f}=ctxTd.dataset; sv(c,k,f,'');
+  const row=getRow(c,k); refreshTd(ctxTd,c,k,f,row); hideCtx();
+}
+
+// ═══════════════════════════════════════════
+//  TAB & SEARCH
+// ═══════════════════════════════════════════
+let cur='l';
+function switchTab(city,btn){
+  cur=city;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('s'+city).classList.add('on');
+  document.getElementById('q').value='';
+  updateCount();
+}
+
+function filter(){
+  const q=document.getElementById('q').value.toLowerCase().trim();
+  const tb=document.getElementById(cur==='l'?'lt':'it');
+  let v=0;
+  tb.querySelectorAll('tr').forEach(row=>{
+    const show=!q||row.innerText.toLowerCase().includes(q);
+    row.classList.toggle('hid',!show);
+    if(show)v++;
+  });
+  const no=document.getElementById(cur==='l'?'ln':'in');
+  no.classList.toggle('on',v===0);
+  const total=cur==='l'?L.length:I.length;
+  document.getElementById('cnt').textContent=q?v+' of '+total:total+' firms';
+}
+
+function updateCount(){
+  const total=cur==='l'?L.length:I.length;
+  document.getElementById('cnt').textContent=total+' firms';
+  document.getElementById(cur==='l'?'ln':'in').classList.remove('on');
+}
+
+// ═══════════════════════════════════════════
+//  PDF EXPORT
+// ═══════════════════════════════════════════
+function getEff(city,code,field,row){
+  const ed=gv(city,code,field);
+  if(ed!==undefined)return ed;
+  return field==='ph'?row.ph:field==='em'?row.em:row.web;
+}
+
+function exportPDF(){
+  if(!window.jspdf){alert('PDF library not loaded. Please check your internet connection and try again.');return;}
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const ts=new Date().toLocaleDateString('en-PK',{year:'numeric',month:'long',day:'numeric'});
+
+  function pageHeader(title){
+    doc.setFillColor(13,31,60); doc.rect(0,0,297,22,'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(14);
+    doc.text('ICAP Approved Training Organizations — '+title,14,10);
+    doc.setFontSize(9); doc.setFont('helvetica','normal');
+    doc.text('Institute of Chartered Accountants of Pakistan  |  Generated: '+ts,14,17);
+    doc.setTextColor(200,151,58); doc.setFontSize(8);
+    doc.text('Contacts: SBP BPRD Circular No.19 (Oct 2024) · PSX Panel (Nov 2023) · Firm websites',200,17);
+  }
+
+  function addTable(data,city,label){
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(13,31,60);
+    doc.text(label,14,30);
+    doc.setDrawColor(200,151,58); doc.setLineWidth(.5); doc.line(14,32,283,32);
+
+    const rows=data.map((r,i)=>[
+      i+1, r.code, r.name.length>35?r.name.substring(0,33)+'…':r.name,
+      r.date, r.mrs.split(',')[0]||'',
+      r.addr.length>50?r.addr.substring(0,48)+'…':r.addr,
+      getEff(city,r.code,'ph',r)||'—',
+      getEff(city,r.code,'em',r)||'—',
+      getEff(city,r.code,'web',r)||'—'
+    ]);
+
+    doc.autoTable({
+      startY:35,
+      head:[['#','TO Code','Firm Name','Date','MRS','Address','Phone','Email','Website']],
+      body:rows,
+      styles:{fontSize:6.5,cellPadding:2,overflow:'linebreak'},
+      headStyles:{fillColor:[13,31,60],textColor:255,fontSize:7,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:[250,248,243]},
+      columnStyles:{
+        0:{cellWidth:7,halign:'center'},1:{cellWidth:16},2:{cellWidth:42},
+        3:{cellWidth:18},4:{cellWidth:28},5:{cellWidth:46},
+        6:{cellWidth:28},7:{cellWidth:44},8:{cellWidth:26}
+      },
+      theme:'grid'
+    });
+  }
+
+  // Page 1 — Lahore
+  pageHeader('Lahore');
+  addTable(L,'l','LAHORE — Approved Training Organizations');
+
+  // Page 2 — Islamabad
+  doc.addPage();
+  pageHeader('Islamabad');
+  addTable(I,'i','ISLAMABAD — Approved Training Organizations');
+
+  // Footer on all pages
+  const pc=doc.internal.getNumberOfPages();
+  for(let p=1;p<=pc;p++){
+    doc.setPage(p);
+    doc.setFontSize(7); doc.setTextColor(140);
+    doc.text('ICAP Lahore Regional Office: 042-111-000-422  |  members.directory@icap.org.pk  |  Contacts marked Legacy are from pre-2020 sources — verify before use.',14,207);
+    doc.text('Page '+p+'/'+pc,278,207,{align:'right'});
+  }
+
+  doc.save('ICAP_TO_Directory_Lahore_Islamabad_'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+render();
+</script>
+</body>
+</html>
